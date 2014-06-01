@@ -1,7 +1,7 @@
 package com.wallissoftware.zip.client;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -9,7 +9,7 @@ public class ZipArchive {
 
     private final BigEndianBinaryStream stream_;
 
-    private final Set<ZipEntry> zipEntries;
+    private final List<ZipEntry> zipEntries;
 
     public final static int MAGIC_NUMBER = 0x04034b50;
 
@@ -28,13 +28,13 @@ public class ZipArchive {
 
     private ZipArchive(final String binaryString) throws NotAZipArchiveException {
         stream_ = new BigEndianBinaryStream(binaryString);
-        zipEntries = new HashSet<ZipEntry>();
+        zipEntries = new ArrayList<>();
         if (!isZipFile()) {
             throw new NotAZipArchiveException();
         }
     }
 
-    public Set<ZipEntry> getZipEntries() {
+    public List<ZipEntry> getZipEntries() {
         return zipEntries;
     }
 
