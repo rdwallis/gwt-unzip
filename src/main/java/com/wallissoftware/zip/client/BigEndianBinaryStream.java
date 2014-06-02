@@ -3,17 +3,17 @@ package com.wallissoftware.zip.client;
 
 public class BigEndianBinaryStream {
 
-    private final String binaryString_;
+    private final String binaryString;
 
     private int currentByteIndex;
 
     public BigEndianBinaryStream(final String binaryString) {
-        binaryString_ = binaryString;
+        this.binaryString = binaryString;
         currentByteIndex = 0;
     }
 
     public int getByteAt(final int index) {
-        return binaryString_.charAt(index);
+        return binaryString.charAt(index);
     }
 
     public long getByteRangeAsNumber(final int index, final int steps) {
@@ -27,7 +27,7 @@ public class BigEndianBinaryStream {
     }
 
     public String getByteRangeAsString(final int index, final int steps) {
-        return binaryString_.substring(index, index + steps);
+        return binaryString.substring(index, index + steps);
     }
 
     public int getCurrentPosition() {
@@ -47,7 +47,7 @@ public class BigEndianBinaryStream {
     }
 
     public boolean hasNext() {
-        return currentByteIndex < binaryString_.length();
+        return currentByteIndex < binaryString.length();
     }
 
 }

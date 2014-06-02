@@ -1,8 +1,5 @@
 package com.wallissoftware.zip.client;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ZipEntry {
 
@@ -94,25 +91,16 @@ public class ZipEntry {
         return fileNameLength;
     }
 
-    public void getInflated(final AsyncCallback<String> callback) {
+    public String getInflated() {
         if (inflated == null) {
             if (compressionMethod == 0) {
                 inflated = data;
-                callback.onSuccess(inflated);
             } else {
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-
-                    @Override
-                    public void execute() {
-                        inflated = Inflate.asString(getData());
-                        callback.onSuccess(inflated);
-                    }
-
-                });
-
+                inflated = Inflate.asString(getData());
             }
+            return getInflated();
         } else {
-            callback.onSuccess(inflated);
+            return inflated;
         }
     }
 

@@ -3,12 +3,10 @@ package com.wallissoftware.zip.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 
 public class ZipArchive {
 
-    private final BigEndianBinaryStream stream_;
+    private final BigEndianBinaryStream stream;
 
     private final List<ZipEntry> zipEntries;
 
@@ -16,22 +14,17 @@ public class ZipArchive {
 
     public final static int EXT_SIG = 0x08074B50;
 
-    public static void createZipArchive(final String binaryString, final AsyncCallback<ZipArchive> callback) {
-        try {
-            final ZipArchive archive = new ZipArchive(binaryString);
-            while (archive.readEntry()) {
-            }
-            callback.onSuccess(archive);
-        } catch (final NotAZipArchiveException e) {
-            callback.onFailure(e);
-        }
+    public static boolean isZipFile(final BigEndianBinaryStream stream) {
+        return stream.getByteRangeAsNumber(0, 4) == MAGIC_NUMBER;
     }
 
-    private ZipArchive(final String binaryString) throws NotAZipArchiveException {
-        stream_ = new BigEndianBinaryStream(binaryString);
+    public ZipArchive(final String binaryString) throws NotAZipArchiveException {
+        stream = new BigEndianBinaryStream(binaryString);
         zipEntries = new ArrayList<>();
-        if (!isZipFile()) {
+        if (!isZipFile(stream)) {
             throw new NotAZipArchiveException();
+        }
+        while (readEntry()) {
         }
     }
 
@@ -39,12 +32,8 @@ public class ZipArchive {
         return zipEntries;
     }
 
-    private boolean isZipFile() {
-        return stream_.getByteRangeAsNumber(0, 4) == MAGIC_NUMBER;
-    }
-
     private boolean readEntry() {
-        final ZipEntry e = new ZipEntry(stream_);
+        final ZipEntry e = new ZipEntry(stream);
         if (e.getData() != null) {
             zipEntries.add(e);
             return true;
