@@ -23,7 +23,7 @@ public class Int8BigEndianBinaryStream extends BigEndianBinaryStream {
 
 
     @Override
-    int length() {
+    protected int length() {
         return file.length();
     }
 

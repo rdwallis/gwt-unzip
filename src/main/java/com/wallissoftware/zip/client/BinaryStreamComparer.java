@@ -27,7 +27,7 @@ public class BinaryStreamComparer extends BigEndianBinaryStream {
 
 
     @Override
-    int length() {
+    protected int length() {
         return stream1.length();
     }
 

@@ -50,6 +50,6 @@ public abstract class BigEndianBinaryStream {
         return currentByteIndex < length();
     }
 
-    abstract int length();
+    protected abstract int length();
 
 }

@@ -27,7 +27,7 @@ public class LegacyBigEndianBinaryStream extends BigEndianBinaryStream {
 
 
     @Override
-    int length() {
+    protected int length() {
         return binaryString.length();
     }
 

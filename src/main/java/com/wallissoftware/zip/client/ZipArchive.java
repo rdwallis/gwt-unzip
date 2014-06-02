@@ -3,8 +3,6 @@ package com.wallissoftware.zip.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.Window;
-
 public class ZipArchive {
 
     private final BigEndianBinaryStream stream;
@@ -25,7 +23,6 @@ public class ZipArchive {
         if (!isZipFile(stream)) {
             throw new NotAZipArchiveException();
         }
-        Window.alert("It's a zip");
         while (readEntry()) {
         }
     }
