@@ -1,6 +1,7 @@
 package com.wallissoftware.zip.client;
 
 
+
 public class ZipEntry {
 
     private long signature;
@@ -50,7 +51,7 @@ public class ZipEntry {
         fileName = stream.getNextBytesAsString((int) fileNameLength);
         extra = stream.getNextBytesAsString((int) extraFieldLength);
         data = stream.getNextBytesAsString((int) compressedSize);
-        if (bitFlag == 8) {
+        if (isUsingBit3TrailingDataDescriptor()) {
             stream.getNextBytesAsNumber(16);
         }
     }

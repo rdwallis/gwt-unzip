@@ -1,20 +1,12 @@
 package com.wallissoftware.zip.client;
 
+public abstract class BigEndianBinaryStream {
 
-public class BigEndianBinaryStream {
+    private int currentByteIndex = 0;
 
-    private final String binaryString;
 
-    private int currentByteIndex;
 
-    public BigEndianBinaryStream(final String binaryString) {
-        this.binaryString = binaryString;
-        currentByteIndex = 0;
-    }
-
-    public int getByteAt(final int index) {
-        return binaryString.charAt(index);
-    }
+    public abstract int getByteAt(final int index);
 
     public long getByteRangeAsNumber(final int index, final int steps) {
         long result = 0;
@@ -26,28 +18,38 @@ public class BigEndianBinaryStream {
         return result;
     }
 
-    public String getByteRangeAsString(final int index, final int steps) {
-        return binaryString.substring(index, index + steps);
+    public final String getByteRangeAsString(final int index, final int steps) {
+        final char[] result = new char[steps];
+
+        for (int i = 0; i < steps; i++) {
+            result[i] = (char) getByteAt(index + i);
+        }
+        return String.valueOf(result);
+
     }
 
-    public int getCurrentPosition() {
+    public final int getCurrentPosition() {
         return this.currentByteIndex;
     }
 
-    public long getNextBytesAsNumber(final int steps) {
+    public final long getNextBytesAsNumber(final int steps) {
         final long result = getByteRangeAsNumber(currentByteIndex, steps);
         currentByteIndex += steps;
         return result;
     }
 
-    public String getNextBytesAsString(final int fileNameLength) {
+
+
+    public final String getNextBytesAsString(final int fileNameLength) {
         final String result = getByteRangeAsString(currentByteIndex, fileNameLength);
         currentByteIndex += fileNameLength;
         return result;
     }
 
-    public boolean hasNext() {
-        return currentByteIndex < binaryString.length();
+    public final boolean hasNext() {
+        return currentByteIndex < length();
     }
+
+    abstract int length();
 
 }

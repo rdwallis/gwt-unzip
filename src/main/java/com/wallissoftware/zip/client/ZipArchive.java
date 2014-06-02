@@ -3,6 +3,7 @@ package com.wallissoftware.zip.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.Window;
 
 public class ZipArchive {
 
@@ -18,12 +19,13 @@ public class ZipArchive {
         return stream.getByteRangeAsNumber(0, 4) == MAGIC_NUMBER;
     }
 
-    public ZipArchive(final String binaryString) throws NotAZipArchiveException {
-        stream = new BigEndianBinaryStream(binaryString);
+    public ZipArchive(final BigEndianBinaryStream stream) throws NotAZipArchiveException {
+        this.stream = stream;
         zipEntries = new ArrayList<>();
         if (!isZipFile(stream)) {
             throw new NotAZipArchiveException();
         }
+        Window.alert("It's a zip");
         while (readEntry()) {
         }
     }
