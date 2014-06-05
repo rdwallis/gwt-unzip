@@ -8,8 +8,8 @@ public abstract class BigEndianBinaryStream {
 
     public abstract int getByteAt(final int index);
 
-    public long getByteRangeAsNumber(final int index, final int steps) {
-        long result = 0;
+    public int getByteRangeAsNumber(final int index, final int steps) {
+        int result = 0;
         int i = index + steps - 1;
         while (i >= index) {
             result = (result << 8) + this.getByteAt(i);
@@ -19,12 +19,12 @@ public abstract class BigEndianBinaryStream {
     }
 
     public final String getByteRangeAsString(final int index, final int steps) {
-        final char[] result = new char[steps];
+        final StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < steps; i++) {
-            result[i] = (char) getByteAt(index + i);
+            result.append((char) getByteAt(index + i));
         }
-        return String.valueOf(result);
+        return result.toString();
 
     }
 
@@ -32,17 +32,17 @@ public abstract class BigEndianBinaryStream {
         return this.currentByteIndex;
     }
 
-    public final long getNextBytesAsNumber(final int steps) {
-        final long result = getByteRangeAsNumber(currentByteIndex, steps);
+    public final int getNextBytesAsNumber(final int steps) {
+        final int result = getByteRangeAsNumber(currentByteIndex, steps);
         currentByteIndex += steps;
         return result;
     }
 
 
 
-    public final String getNextBytesAsString(final int fileNameLength) {
-        final String result = getByteRangeAsString(currentByteIndex, fileNameLength);
-        currentByteIndex += fileNameLength;
+    public final String getNextBytesAsString(final int steps) {
+        final String result = getByteRangeAsString(currentByteIndex, steps);
+        currentByteIndex += steps;
         return result;
     }
 

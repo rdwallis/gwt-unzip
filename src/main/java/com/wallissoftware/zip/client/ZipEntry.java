@@ -2,27 +2,29 @@ package com.wallissoftware.zip.client;
 
 
 
+
+
 public class ZipEntry {
 
-    private long signature;
+    private int signature;
 
-    private long versionNeeded;
+    private int versionNeeded;
 
-    private long bitFlag;
+    private int bitFlag;
 
-    private long compressionMethod;
+    private int compressionMethod;
 
-    private long timeBlob;
+    private int timeBlob;
 
-    private long crc32;
+    private int crc32;
 
-    private long compressedSize;
+    private int compressedSize;
 
-    private long uncompressedSize;
+    private int uncompressedSize;
 
-    private long fileNameLength;
+    private int fileNameLength;
 
-    private long extraFieldLength;
+    private int extraFieldLength;
 
     private String fileName;
 
@@ -48,9 +50,9 @@ public class ZipEntry {
         uncompressedSize = stream.getNextBytesAsNumber(4);
         fileNameLength = stream.getNextBytesAsNumber(2);
         extraFieldLength = stream.getNextBytesAsNumber(2);
-        fileName = stream.getNextBytesAsString((int) fileNameLength);
-        extra = stream.getNextBytesAsString((int) extraFieldLength);
-        data = stream.getNextBytesAsString((int) compressedSize);
+        fileName = stream.getNextBytesAsString(fileNameLength);
+        extra = stream.getNextBytesAsString(extraFieldLength);
+        data = stream.getNextBytesAsString(compressedSize);
         if (isUsingBit3TrailingDataDescriptor()) {
             stream.getNextBytesAsNumber(16);
         }
@@ -99,7 +101,7 @@ public class ZipEntry {
             } else {
                 inflated = Inflate.asString(getData());
             }
-            return getInflated();
+            return inflated;
         } else {
             return inflated;
         }
