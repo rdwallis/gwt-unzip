@@ -2,17 +2,23 @@ package com.wallissoftware.zip.client;
 
 import com.google.gwt.user.client.Window;
 
-public class BinaryStreamComparer extends BigEndianBinaryStream {
+public class BinaryStreamComparer extends BinaryStream {
 
-    private final BigEndianBinaryStream stream1, stream2;
+    private final BinaryStream stream1, stream2;
 
-    public BinaryStreamComparer(final BigEndianBinaryStream stream1, final BigEndianBinaryStream stream2) {
+    public BinaryStreamComparer(final BinaryStream stream1, final BinaryStream stream2) {
         this.stream1 = stream1;
         this.stream2 = stream2;
-        if (stream2.length() != stream1.length()) {
-            Window.alert("lengths don't match: " + stream1.length() + "!=" + stream2.length());
+        if (stream2.getLength() != stream1.getLength()) {
+            Window.alert("lengths don't match: " + stream1.getLength() + "!=" + stream2.getLength());
         }
     }
+
+    @Override
+    BinaryStream doSplit(final int start, final int end) {
+        return new BinaryStreamComparer(stream1.doSplit(start, end), stream2.doSplit(start, end));
+    }
+
 
     @Override
     public int getByteAt(final int index) {
@@ -25,10 +31,9 @@ public class BinaryStreamComparer extends BigEndianBinaryStream {
         return result1;
     }
 
-
     @Override
-    protected int length() {
-        return stream1.length();
+    public int getLength() {
+        return stream1.getLength();
     }
 
 }

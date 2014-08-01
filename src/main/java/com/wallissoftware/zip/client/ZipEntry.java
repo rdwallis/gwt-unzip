@@ -34,27 +34,27 @@ public class ZipEntry {
 
     private String inflated;
 
-    protected ZipEntry(final BigEndianBinaryStream stream) {
-        signature = stream.getNextBytesAsNumber(4);
+    protected ZipEntry(final BinaryStream stream) {
+        signature = stream.num(4);
 
         if (signature != ZipArchive.MAGIC_NUMBER) {
             return;
         }
-        versionNeeded = stream.getNextBytesAsNumber(2);
-        bitFlag = stream.getNextBytesAsNumber(2);
-        compressionMethod = stream.getNextBytesAsNumber(2);
-        timeBlob = stream.getNextBytesAsNumber(4);
+        versionNeeded = stream.num(2);
+        bitFlag = stream.num(2);
+        compressionMethod = stream.num(2);
+        timeBlob = stream.num(4);
 
-        crc32 = stream.getNextBytesAsNumber(4);
-        compressedSize = stream.getNextBytesAsNumber(4);
-        uncompressedSize = stream.getNextBytesAsNumber(4);
-        fileNameLength = stream.getNextBytesAsNumber(2);
-        extraFieldLength = stream.getNextBytesAsNumber(2);
-        fileName = stream.getNextBytesAsString(fileNameLength);
-        extra = stream.getNextBytesAsString(extraFieldLength);
-        data = stream.getNextBytesAsString(compressedSize);
+        crc32 = stream.num(4);
+        compressedSize = stream.num(4);
+        uncompressedSize = stream.num(4);
+        fileNameLength = stream.num(2);
+        extraFieldLength = stream.num(2);
+        fileName = stream.string(fileNameLength);
+        extra = stream.string(extraFieldLength);
+        data = stream.string(compressedSize);
         if (isUsingBit3TrailingDataDescriptor()) {
-            stream.getNextBytesAsNumber(16);
+            stream.num(16);
         }
     }
 
@@ -99,7 +99,7 @@ public class ZipEntry {
             if (compressionMethod == 0) {
                 inflated = data;
             } else {
-                inflated = Inflate.asString(getData());
+                inflated = Inflate.inflateRaw(getData());
             }
             return inflated;
         } else {

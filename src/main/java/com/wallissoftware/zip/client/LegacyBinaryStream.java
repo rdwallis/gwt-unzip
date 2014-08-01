@@ -1,12 +1,17 @@
 package com.wallissoftware.zip.client;
 
-public class LegacyBigEndianBinaryStream extends BigEndianBinaryStream {
+public class LegacyBinaryStream extends BinaryStream {
     private final String binaryString;
 
 
 
-    public LegacyBigEndianBinaryStream(final String binaryString) {
+    public LegacyBinaryStream(final String binaryString) {
         this.binaryString = binaryString;
+    }
+
+    @Override
+    BinaryStream doSplit(final int start, final int end) {
+        return new LegacyBinaryStream(binaryString.substring(start, end));
     }
 
     @Override
@@ -15,10 +20,9 @@ public class LegacyBigEndianBinaryStream extends BigEndianBinaryStream {
     }
 
     @Override
-    protected int length() {
+    public int getLength() {
         return binaryString.length();
     }
-
 
 
 }

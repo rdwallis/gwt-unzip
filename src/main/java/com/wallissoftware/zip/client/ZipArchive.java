@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ZipArchive {
 
-    private final BigEndianBinaryStream stream;
+    private final BinaryStream stream;
 
     private final List<ZipEntry> zipEntries;
 
@@ -13,11 +13,11 @@ public class ZipArchive {
 
     public final static int EXT_SIG = 0x08074B50;
 
-    public static boolean isZipFile(final BigEndianBinaryStream stream) {
+    public static boolean isZipFile(final BinaryStream stream) {
         return stream.getByteRangeAsNumber(0, 4) == MAGIC_NUMBER;
     }
 
-    public ZipArchive(final BigEndianBinaryStream stream) throws NotAZipArchiveException {
+    public ZipArchive(final BinaryStream stream) throws NotAZipArchiveException {
         this.stream = stream;
         zipEntries = new ArrayList<>();
         if (!isZipFile(stream)) {
@@ -25,6 +25,10 @@ public class ZipArchive {
         }
         while (readEntry()) {
         }
+    }
+
+    public String getMd5() {
+        return stream.getMd5();
     }
 
     public List<ZipEntry> getZipEntries() {
